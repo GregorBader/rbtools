@@ -55,7 +55,7 @@
 
  <Import Project="$(WixTargetsPath)" />
 
- <!-- Sign the bundled installer. -->
+ <!-- Sign the bundled installer. 
  <Target Name="SignBundleEngine">
   <SignFile CertificateThumbprint="$(CertificateThumbprint)"
             TimestampUrl="$(TimestampUrl)"
@@ -67,6 +67,7 @@
             TimestampUrl="$(TimestampUrl)"
             SigningTarget="@(SignBundle)"/>
  </Target>
+ -->
 
  <!-- Copy the built installer to the output directory. -->
  <Target Name="AfterBuild">

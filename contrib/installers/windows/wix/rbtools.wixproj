@@ -52,15 +52,17 @@
 
  <Import Project="$(WixTargetsPath)" />
 
- <!-- Sign the bundled cabinet files -->
+ <!-- Sign the bundled cabinet files
  <Target Name="SignCabs">
   <SignFile CertificateThumbprint="$(CertificateThumbprint)"
             TimestampUrl="$(TimestampUrl)"
             SigningTarget="%(SignCabs.FullPath)"/>
  </Target>
+ -->
 
- <!-- Sign the installer -->
+ <!-- Sign the installer
  <Target Name="SignMsi">
   <Exec Command='"$(WindowsSDK80Path)\bin\x64\signtool.exe" sign /sha1 $(CertificateThumbprint) /t $(TimestampUrl) "%(SignMsi.FullPath)"' />
  </Target>
+ -->
 </Project>
