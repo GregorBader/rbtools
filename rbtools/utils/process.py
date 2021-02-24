@@ -38,6 +38,7 @@ def execute(command,
             return_error_code=False,
             log_output_on_error=True,
             results_unicode=True,
+            results_encoding=None,
             return_errors=False):
     """Execute a command and return the output.
 
@@ -86,6 +87,9 @@ def execute(command,
             If ``True``, the output will be treated as text and returned as
             unicode strings instead of bytes.
 
+        results_encoding (unicode, optional):
+            Optional encoding setting for command results.
+
         return_errors (bool, optional):
             Whether to return the content of the stderr stream. This argument
             is mutually exclusive with the ``with_errors`` argument.
@@ -133,7 +137,10 @@ def execute(command,
         # Popen before Python 3.6 doesn't support the ``encoding`` parameter,
         # so we have to use ``universal_newlines`` and then decode later.
         if six.PY3 and sys.version_info.minor >= 6:
-            popen_encoding_args['encoding'] = 'utf-8'
+            if results_encoding is None:
+                popen_encoding_args['encoding'] = 'utf-8'
+            else:
+                popen_encoding_args['encoding'] = results_encoding
         else:
             popen_encoding_args['universal_newlines'] = True
 
@@ -168,7 +175,10 @@ def execute(command,
 
     # We did not specify `encoding` to Popen earlier, so we must decode now.
     if results_unicode and 'encoding' not in popen_encoding_args:
-        data = force_unicode(data)
+        if results_encoding is None:
+            data = force_unicode(data)
+        else:
+            data = force_unicode(data, encoding=results_encoding)
 
     if split_lines:
         data = data.splitlines(True)

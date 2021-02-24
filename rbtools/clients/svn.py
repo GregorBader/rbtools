@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import logging
 import os
+import locale
 import posixpath
 import re
 import sys
@@ -30,6 +31,12 @@ from rbtools.utils.process import execute
 
 
 _fs_encoding = sys.getfilesystemencoding()
+# Subversion uses the current locale configuration for its output.
+# Therefore some characters in e.g. date strings from 'svn info', may not be
+# encoded in UTF-8 and lead to an UnicodeDecodeError exception. To fix this
+# the default encoding has to be used.
+# see http://svnbook.red-bean.com/en/1.8/svn.advanced.l10n.html
+_def_lang_code, _def_encoding = locale.getdefaultlocale()
 
 
 class SVNClient(SCMClient):
@@ -906,6 +913,7 @@ class SVNClient(SCMClient):
         if path not in self._svn_info_cache:
             result = self._run_svn(['info', path],
                                    split_lines=True,
+                                   results_encoding=_def_encoding,
                                    ignore_errors=ignore_errors,
                                    none_on_ignored_error=True)
             if result is None:
