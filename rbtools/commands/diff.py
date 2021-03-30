@@ -4,6 +4,7 @@ import sys
 
 from rbtools.clients.errors import InvalidRevisionSpecError
 from rbtools.commands import Command, CommandError
+from rbtools.utils.encoding import force_bytes
 
 import six
 
@@ -95,5 +96,6 @@ class Diff(Command):
                 print(diff)
             else:
                 # Write the non-decoded binary diff to standard out
+                diff = force_bytes(diff)
                 sys.stdout.buffer.write(diff)
                 print()

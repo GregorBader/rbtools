@@ -16,6 +16,7 @@ from rbtools.commands import Command, CommandError, Option
 from rbtools.utils.commands import extract_commit_message
 from rbtools.utils.filesystem import make_tempfile
 from rbtools.utils.review_request import parse_review_request_url
+from rbtools.utils.encoding import force_bytes
 
 
 logger = logging.getLogger(__name__)
@@ -349,6 +350,7 @@ class Patch(Command):
             if six.PY2:
                 print(patch_output)
             else:
+                patch_output = force_bytes(patch_output)
                 sys.stdout.buffer.write(patch_output)
                 print()
 
@@ -495,6 +497,7 @@ class Patch(Command):
 
             if isinstance(diff_body, bytes):
                 if six.PY3:
+                    diff_body = force_bytes(diff_body)
                     sys.stdout.buffer.write(diff_body)
                     print()
                 else:
